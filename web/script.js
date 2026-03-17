@@ -8,6 +8,7 @@ async function loadPosts() {
         
         renderPosts(allPosts);
         setupSearch();
+        handleInitialHash(); // Manejar el link directo al cargar
     } catch (error) {
         console.error('Error loading posts:', error);
         grid.innerHTML = '<div class="card"><div class="card-content"><h3>Aún no hay artículos publicados.</h3><p>¡Vuelve pronto para ver las últimas tendencias!</p></div></div>';
@@ -73,6 +74,10 @@ function setupSearch() {
 }
 
 function openModal(post) {
+    // Cambiar la URL sin recargar para que sea compartible
+    const slug = createSlug(post.title);
+    window.location.hash = slug;
+
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.onclick = (e) => { if(e.target === modal) closeModal(); };
@@ -80,17 +85,23 @@ function openModal(post) {
     modal.innerHTML = `
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <img src="${post.image}" alt="${post.title}" class="modal-img" onerror="this.style.display='none'">
+            <div class="modal-header-img">
+                <img src="${post.image}" alt="${post.title}" class="modal-img" onerror="this.style.display='none'">
+                <div class="modal-img-gradient"></div>
+            </div>
             <div class="modal-body">
-                <div class="card-tag">${post.tag || 'Viral'}</div>
+                <div class="card-meta">
+                    <span class="card-tag">${post.tag || 'Viral'}</span>
+                    <span class="card-date">${post.date}</span>
+                </div>
                 <h1>${post.title}</h1>
-                <div class="modal-date">Publicado el ${post.date}</div>
                 <div class="modal-text">${post.content}</div>
+                
                 <div class="modal-share">
-                    <p>¡Comparte este contenido viral!</p>
+                    <p>¡Comparte esta tendencia antes de que desaparezca!</p>
                     <div class="share-buttons">
-                        <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}')">Twitter</button>
-                        <button onclick="window.open('https://t.me/share/url?url='+window.location.href+'&text=${encodeURIComponent(post.title)}')">Telegram</button>
+                        <button class="btn-twitter" onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}')">Twitter</button>
+                        <button class="btn-telegram" onclick="window.open('https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}')">Telegram</button>
                     </div>
                 </div>
             </div>
@@ -100,11 +111,27 @@ function openModal(post) {
     document.body.style.overflow = 'hidden';
 }
 
+function createSlug(text) {
+    return text.toString().toLowerCase().trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+}
+
+function handleInitialHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+        const post = allPosts.find(p => createSlug(p.title) === hash);
+        if (post) openModal(post);
+    }
+}
+
 function closeModal() {
     const modal = document.querySelector('.modal-overlay');
     if (modal) {
         modal.remove();
         document.body.style.overflow = 'auto';
+        history.pushState("", document.title, window.location.pathname + window.location.search);
     }
 }
 

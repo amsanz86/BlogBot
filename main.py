@@ -10,6 +10,8 @@ from agents.image_creator import ImageCreator
 from agents.publisher import Publisher
 from agents.social_distributor import SocialDistributor
 from agents.growth_analyst import GrowthAnalyst
+import re
+import unicodedata
 
 # Initialize agents
 hunter = TrendHunter()
@@ -19,6 +21,11 @@ imager = ImageCreator()
 publisher = Publisher()
 distributor = SocialDistributor()
 growth = GrowthAnalyst()
+
+def create_slug(text):
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
+    text = re.sub(r'[^\w\s-]', '', text).lower().strip()
+    return re.sub(r'[-\s]+', '-', text)
 
 def run_engine():
     logger.info("=== AUTO VIRAL BLOG ENGINE STARTING ===")
@@ -53,7 +60,8 @@ def run_engine():
         mark_trend_processed(best_trend)
         
         # 7. Social Distribution
-        post_url = "https://tu-blog.github.io" # Tu futura URL en GitHub
+        slug = create_slug(article_data['title'])
+        post_url = f"https://amsanz86.github.io/BlogBot/web/#{slug}" 
         distributor.share_all(article_data['title'], post_url)
 
     # 8. Growth Analysis
