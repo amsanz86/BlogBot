@@ -28,8 +28,9 @@ class ImageCreator:
                 logger.info(f"Free image saved to {path}")
                 return path
             else:
-                logger.error(f"Pollinations error: {response.status_code}")
-                return None
+                logger.warning(f"Pollinations failed ({response.status_code}). Trying Unsplash Fallback...")
+                fallback_url = f"https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1024&q=80"
+                return self._download_fallback(fallback_url)
         except Exception as e:
             logger.error(f"Error creating free image: {e}. Trying Unsplash Fallback...")
             # Unsplash fallback for reliability

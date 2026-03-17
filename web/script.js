@@ -19,15 +19,16 @@ function renderPosts(posts) {
     const grid = document.getElementById('posts-grid');
     grid.innerHTML = '';
     
-    [...posts].reverse().forEach((post, index) => {
+    // Mostramos los posts directamente (ya vienen invertidos o los manejamos aquí)
+    posts.forEach((post, index) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.onclick = () => openModal(post);
         card.innerHTML = `
             <div class="card-img-container">
-                <img src="${post.image}" alt="${post.title}" class="card-img" onerror="this.src='https://via.placeholder.com/400x250?text=Viral+Buzz'">
+                <img src="${post.image}" alt="${post.title}" class="card-img" onerror="this.src='https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800'">
                 <div class="card-overlay">
-                    <span>Leer Artículo <i class="arrow-icon">&rarr;</i></span>
+                    <span>SEGUIR LEYENDO</span>
                 </div>
             </div>
             <div class="card-content">
@@ -37,9 +38,7 @@ function renderPosts(posts) {
                 </div>
                 <h3>${post.title}</h3>
                 <p>${extractExcerpt(post.content)}</p>
-                <div class="card-footer">
-                    <span class="read-more">Seguir leyendo &rarr;</span>
-                </div>
+                <div class="read-more-btn">Leer noticia completa</div>
             </div>
         `;
         grid.appendChild(card);
