@@ -6,8 +6,8 @@ import os
 
 class ImageCreator:
     def __init__(self):
-        # Pollinations is FREE and needs no API key
-        self.base_url = "https://pollinations.ai/p/"
+        # Pollinations image generation API
+        self.base_url = "https://image.pollinations.ai/prompt/"
 
     def create_image(self, prompt):
         logger.info(f"Generating FREE image with Pollinations.ai...")
@@ -17,8 +17,8 @@ class ImageCreator:
             image_url = f"{self.base_url}{encoded_prompt}?width=1024&height=1024&seed={os.urandom(4).hex()}&model=flux"
             
             # Download image locally
-            response = requests.get(image_url)
-            if response.status_code == 200:
+            response = requests.get(image_url, timeout=30)
+            if response.status_code == 200 and 'image' in response.headers.get('Content-Type', ''):
                 img_data = response.content
                 filename = f"image_{os.urandom(4).hex()}.png"
                 path = os.path.join("data", filename)
