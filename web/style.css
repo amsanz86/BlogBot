@@ -25,7 +25,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar personalizada */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--card-bg); border-radius: 10px; border: 2px solid var(--bg); }
@@ -96,10 +95,23 @@ nav {
 @media (max-width: 768px) {
     .grid {
         grid-template-columns: 1fr;
-        padding: 1rem 0;
+        padding: 1rem 0 4rem;
+        gap: 1.5rem;
     }
-    .hero { padding: 4rem 0 2rem; }
-    .container { padding: 0 1.5rem; }
+    .hero { padding: 3rem 0; }
+    .hero h1 { font-size: 2.5rem; }
+    .container { padding: 0 1.25rem; }
+    .card h3 { 
+        font-size: 1.15rem;
+        height: 3.5rem;
+    }
+    .modal-overlay { padding: 0; }
+    .modal-content { 
+        height: 100%; 
+        max-height: 100vh; 
+        border-radius: 0; 
+    }
+    .modal-img { height: 220px; }
 }
 
 .card {
@@ -115,12 +127,11 @@ nav {
 }
 
 .card:hover {
-    box-shadow: 0 0 0 2px var(--primary), 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(99, 102, 241, 0.4);
+    border-color: var(--primary);
     background: var(--card-hover);
-    z-index: 10;
 }
 
-/* El primer post tiene un brillo especial suave */
 .card:first-child {
     position: relative;
     border: 1px solid rgba(99, 102, 241, 0.3);
@@ -183,30 +194,50 @@ nav {
 
 .card-overlay span {
     background: white;
-    color: var(--bg);
+    color: black;
     padding: 0.7rem 1.8rem;
     border-radius: 3rem;
     font-weight: 800;
     font-size: 0.9rem;
-    transform: translateY(20px);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
-.card:hover .card-overlay span {
-    transform: translateY(0);
+.card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
 }
 
-.card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+.card-tag {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
 }
 
-.card-date {
-    font-size: 0.8rem;
+.card h3 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 3.9rem;
+}
+
+.card p {
     color: var(--text-muted);
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .search-bar {
@@ -224,31 +255,21 @@ nav {
     text-align: center;
 }
 
-@media (max-width: 768px) {
-    .search-bar {
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-        margin-top: 1.5rem;
-    }
-}
-
 .search-bar:focus {
     border-color: var(--primary);
 }
 
-/* Modal Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(3, 7, 18, 0.9);
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
 }
 
 .modal-content {
@@ -262,14 +283,6 @@ nav {
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 50px 100px rgba(0,0,0,0.8);
     animation: modalIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-@media (max-width: 768px) {
-    .modal-overlay { padding: 1rem; }
-    .modal-body { padding: 1.5rem; }
-    .modal-body h1 { font-size: 1.8rem; }
-    .modal-img { height: 250px; }
-    .hero p { font-size: 1rem; }
 }
 
 @keyframes modalIn {
@@ -324,11 +337,6 @@ nav {
 .modal-body h1 {
     font-size: 2.5rem;
     margin: 1.5rem 0;
-}
-
-.modal-date {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
 }
 
 .modal-text {

@@ -50,6 +50,9 @@ def run_engine():
 
     # 4. Create Image
     image_path = imager.create_image(article_data['image_prompt'])
+    if not image_path:
+        logger.error("Image generation failed. Aborting publication to maintain quality.")
+        return
 
     # 5. Publish to Local Web
     post_id = publisher.publish(article_data['title'], article_data['content'], image_path)
