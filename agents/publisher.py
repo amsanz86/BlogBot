@@ -26,6 +26,11 @@ class Publisher:
             dest = os.path.join(self.web_img_path, new_name)
             shutil.copy(image_path, dest)
             web_image_url = f"data/images/{new_name}"
+        
+        # CRITICAL: If no image after all attempts, do not publish
+        if not web_image_url:
+            logger.error("No image available for this post. Skipping publication.")
+            return None
 
         # 2. Read existing posts
         posts = []
@@ -33,11 +38,13 @@ class Publisher:
             try:
                 with open(self.data_path, 'r', encoding='utf-8') as f:
                     posts = json.load(f)
+                # Cleanup: remove anything corrupted or without image
+                posts = [p for p in posts if p.get('image') and p.get('title')]
             except Exception as e:
                 logger.error(f"Error reading posts.json: {e}")
                 posts = []
 
-        # 3. Add new post
+        # 3. Add new post (at the BEGINNING for reverse chronological order)
         new_post = {
             "title": title,
             "content": content,
@@ -45,7 +52,7 @@ class Publisher:
             "date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "tag": "Viral"
         }
-        posts.append(new_post)
+        posts.insert(0, new_post)
 
         # 4. Save back to JSON
         try:

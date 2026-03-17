@@ -31,5 +31,20 @@ class ImageCreator:
                 logger.error(f"Pollinations error: {response.status_code}")
                 return None
         except Exception as e:
-            logger.error(f"Error creating free image: {e}")
+            logger.error(f"Error creating free image: {e}. Trying Unsplash Fallback...")
+            # Unsplash fallback for reliability
+            fallback_url = f"https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1024&q=80"
+            return self._download_fallback(fallback_url)
+
+    def _download_fallback(self, url):
+        try:
+            response = requests.get(url, timeout=30)
+            if response.status_code == 200:
+                filename = f"image_fallback_{os.urandom(4).hex()}.png"
+                path = os.path.join("data", filename)
+                with open(path, 'wb') as handler:
+                    handler.write(response.content)
+                logger.info(f"Fallback image saved to {path}")
+                return path
+        except:
             return None
