@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Buzz - Las mejores tendencias hoy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container nav">
+            <div class="logo">VIRAL BUZZ</div>
+            <div class="menu">
+                <span>Tendencias</span>
+                <span style="margin-left: 20px;">Populares</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Descubre lo que el mundo está hablando</h1>
+            <p>Contenido actualizado cada 8 horas por nuestra inteligencia artificial de última generación.</p>
+        </section>
+
+        <section id="posts-grid" class="grid">
+            <!-- Posts will be loaded here -->
+            <div class="card">
+                <div class="card-content">
+                    <h3>Cargando las últimas tendencias...</h3>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Viral Buzz. Desarrollado Manuel Sanchez.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Asegurar que las funciones de cierre del modal estén disponibles globalmente
+        window.closeModal = function () {
+            const modal = document.querySelector('.modal-overlay');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+            }
+        };
+    </script>
+</body>
+
+</html>
